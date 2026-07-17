@@ -57,7 +57,7 @@ sources/1 = SubResource("TileSetAtlasSource_gbc2j")
 [node name="TestMap" type="Node2D" unique_id=762353532]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=661546681 node_paths=PackedStringArray("tilemap", "energy_label", "scream_Image")]
-position = Vector2(8, 8)
+position = Vector2(24, 8)
 script = ExtResource("1_8xpg0")
 tilemap = NodePath("../TileMapLayer")
 energy_label = NodePath("Camera2D/Label2")
