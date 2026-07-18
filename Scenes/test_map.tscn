@@ -115,6 +115,7 @@ tile_map_data = PackedByteArray("AAD6//v/AQAAAAEAAAD6//z/AQAAAAEAAAD6//3/AQAAAAE
 tile_set = SubResource("TileSet_4wdx0")
 
 [node name="Saves" type="Node2D" parent="." unique_id=2042703414]
+y_sort_enabled = true
 
 [node name="SaveMonument" parent="Saves" unique_id=49053912 instance=ExtResource("1_leqta")]
 position = Vector2(0, 8)
