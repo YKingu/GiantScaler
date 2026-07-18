@@ -1,3 +1,5 @@
+class_name PCBehaviour
+
 extends CharacterBody2D
 
 const tile_size : int = 16
@@ -185,3 +187,9 @@ func handle_special_tile_post(special_tile_name : String) -> bool:
 				return true
 	
 	return false
+
+func reset():
+	last_tile_position = position
+	curr_player_state = Player_State.IDLE
+	movement_vector = Vector2.ZERO
+	
