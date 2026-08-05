@@ -10,6 +10,9 @@ var next_checkpoint : int = -1
 var player_character : PCBehaviour
 var respawn_point : Node2D
 
+@export var sprite_active : Node2D
+@export var sprite_inactive : Node2D
+
 func _input(event):
 	if !is_active():
 		return
@@ -47,6 +50,7 @@ func _ready() -> void:
 	if is_active():
 		load_from_this_checkpoint()
 	
+	set_sprite_active()
 	get_other_checkpoints()
 
 func get_other_checkpoints():
@@ -63,6 +67,8 @@ func get_other_checkpoints():
 func activate_checkpoint(body: Node2D):
 	if LevelInfo.current_checkpoint < check_point_number:
 		LevelInfo.current_checkpoint = check_point_number
+	
+	set_sprite_active()
 
 func load_checkpoint( load_next_checkpoint : bool):
 	var checkpoint_to_load = prev_checkpoint
@@ -80,3 +86,11 @@ func load_from_this_checkpoint():
 
 func is_active() ->bool:
 	return LevelInfo.current_checkpoint == check_point_number
+
+func set_sprite_active():
+	var temp_bool : bool = LevelInfo.current_checkpoint >= check_point_number
+	print(check_point_number)
+	print(temp_bool)
+	sprite_active.visible = temp_bool
+	sprite_inactive.visible = !temp_bool
+	

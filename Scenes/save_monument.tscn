@@ -2,12 +2,16 @@
 
 [ext_resource type="Script" uid="uid://klo8wxp31nm7" path="res://Scripts/checkpoint.gd" id="1_gpdg1"]
 [ext_resource type="Texture2D" uid="uid://cko730ehklqdd" path="res://Assets/Sprites/save monument.png" id="2_q6ib4"]
+[ext_resource type="Texture2D" uid="uid://d0gic33e4ngkv" path="res://Assets/Sprites/save monument light.png" id="3_w5125"]
+[ext_resource type="Texture2D" uid="uid://cpelc12124bv8" path="res://Assets/Sprites/save monument lit.png" id="4_qm8t2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5gbxq"]
 size = Vector2(30, 14)
 
-[node name="SaveMonument" type="Node2D" unique_id=49053912]
+[node name="SaveMonument" type="Node2D" unique_id=49053912 node_paths=PackedStringArray("sprite_active", "sprite_inactive")]
 script = ExtResource("1_gpdg1")
+sprite_active = NodePath("Node2D")
+sprite_inactive = NodePath("Sprite")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1691133631]
 
@@ -24,3 +28,23 @@ y_sort_enabled = true
 position = Vector2(7, 2)
 texture = ExtResource("2_q6ib4")
 offset = Vector2(0, -7)
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1972232131]
+z_index = 1
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(7, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D" unique_id=1470381247]
+z_index = 2
+position = Vector2(-7, -20)
+texture = ExtResource("3_w5125")
+centered = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D" unique_id=426505669]
+z_index = 1
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-7, -15)
+texture = ExtResource("4_qm8t2")
+centered = false

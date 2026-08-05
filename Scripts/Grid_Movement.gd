@@ -19,6 +19,9 @@ var curr_energy : int = 0
 @export var tilemap : TileMapLayer
 @export var energy_label : Label
 @export var scream_Image : Node
+@export var camera : Camera2D
+
+var fall_start_tile_position : Vector2 = Vector2.ZERO
 
 var movement_inputs = {
 	"move_up" = Vector2.UP,
@@ -93,6 +96,12 @@ func _physics_process(delta: float) -> void:
 					move_and_slide()
 			else:
 				move_and_slide()
+			
+			if abs((fall_start_tile_position - last_tile_position).y) > 11 * tile_size:
+				die()
+	
+	if curr_player_state != Player_State.FALLING:
+		camera.position = self.position
 
 func arrive_at_tile(new_tile_position : Vector2):
 	last_tile_position = new_tile_position
@@ -115,6 +124,7 @@ func arrive_at_tile(new_tile_position : Vector2):
 
 func fall_down():
 	scream_Image.visible = true
+	fall_start_tile_position = last_tile_position
 	curr_player_state = Player_State.FALLING
 
 func reset_position_and_speed():
@@ -140,7 +150,7 @@ func get_tile_data_at_point(cell_data_point : Vector2) -> TileData:
 	
 	return return_data
 
-func get_energy_consumption(tile_data : TileData, ovement_direction:String) -> int:
+func get_energy_consumption(tile_data : TileData, movement_direction:String) -> int:
 	var propertyName : String = ""
 	match movement_direction:
 		"move_up":
@@ -192,4 +202,6 @@ func reset():
 	last_tile_position = position
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
-	
+
+func die():
+	get_tree().reload_current_scene()
