@@ -18,7 +18,7 @@ var curr_energy : int = 0
 
 @export var tilemap : TileMapLayer
 @export var energy_label : Label
-@export var scream_Image : Node
+@export var sprite_animation : AnimatedSprite2D
 @export var camera : Camera2D
 
 var fall_start_tile_position : Vector2 = Vector2.ZERO
@@ -89,7 +89,6 @@ func _physics_process(delta: float) -> void:
 				last_tile_position += Vector2.DOWN * tile_size
 				var new_tile_data := get_tile_data_at_point(last_tile_position)
 				if new_tile_data.get_custom_data("floor"):
-					scream_Image.visible = false
 					set_energy(max_energy)
 					reset_position_and_speed()
 				else:
@@ -102,6 +101,33 @@ func _physics_process(delta: float) -> void:
 	
 	if curr_player_state != Player_State.FALLING:
 		camera.position = self.position
+		
+	handle_animation()
+
+func handle_animation():
+	match curr_player_state:
+		Player_State.IDLE:
+			var current_tile : TileData = get_tile_data_at_point(self.position)
+			if current_tile.get_custom_data("floor"):
+				change_animation_if_different("Idle")
+			else:
+				change_animation_if_different("ClimbIdle")
+		Player_State.WALKING:
+			var current_tile : TileData = get_tile_data_at_point(self.position)
+			change_animation_if_different("Idle")
+		Player_State.CLIMBING:
+			change_animation_if_different("Climb")
+		Player_State.FALLING:
+			change_animation_if_different("Falling")
+			
+		
+
+func change_animation_if_different(new_animation: String):
+	
+	if sprite_animation.animation != new_animation:
+		print(sprite_animation.animation)
+		sprite_animation.animation = new_animation
+		sprite_animation.play()
 
 func arrive_at_tile(new_tile_position : Vector2):
 	last_tile_position = new_tile_position
@@ -123,7 +149,6 @@ func arrive_at_tile(new_tile_position : Vector2):
 		reset_position_and_speed()
 
 func fall_down():
-	scream_Image.visible = true
 	fall_start_tile_position = last_tile_position
 	curr_player_state = Player_State.FALLING
 

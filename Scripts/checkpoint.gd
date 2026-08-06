@@ -20,10 +20,8 @@ func _input(event):
 	if event.is_action_pressed("restart_level"):
 		get_tree().reload_current_scene()
 	if event.is_action_pressed("prev_checkpoint"):
-		print("prev")
 		load_checkpoint(false)
 	if event.is_action_pressed("next_checkpoint"):
-		print("next")
 		load_checkpoint(true)
 
 func _ready() -> void:
@@ -75,7 +73,6 @@ func load_checkpoint( load_next_checkpoint : bool):
 	if load_next_checkpoint:
 		checkpoint_to_load = next_checkpoint
 	
-	print(checkpoint_to_load)
 	if checkpoint_to_load > 0:
 		LevelInfo.current_checkpoint = checkpoint_to_load
 		get_tree().reload_current_scene()
@@ -89,8 +86,6 @@ func is_active() ->bool:
 
 func set_sprite_active():
 	var temp_bool : bool = LevelInfo.current_checkpoint >= check_point_number
-	print(check_point_number)
-	print(temp_bool)
 	sprite_active.visible = temp_bool
 	sprite_inactive.visible = !temp_bool
 	
