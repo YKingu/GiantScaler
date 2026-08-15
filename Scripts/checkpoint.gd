@@ -13,29 +13,44 @@ var respawn_point : Node2D
 @export var sprite_active : Node2D
 @export var sprite_inactive : Node2D
 
+var main_scene : MainScene
+
 func _input(event):
 	if !is_active():
 		return
 	
 	if event.is_action_pressed("restart_level"):
-		get_tree().reload_current_scene()
+		LevelInfo.main_scene.reload_level()
 	if event.is_action_pressed("prev_checkpoint"):
+		print("action pressed prev")
 		load_checkpoint(false)
 	if event.is_action_pressed("next_checkpoint"):
 		load_checkpoint(true)
 
 func _ready() -> void:
 	
+	print(is_active())
+	print(LevelInfo.current_checkpoint)
 	#get reference to player character
-	for child in get_tree().root.find_children("*", "", true, false):
-		if child is PCBehaviour:
-			player_character = child
-			break
+	#for child in get_tree().root.find_children("*", "", true, false):
+	#	if child is PCBehaviour:
+	#		player_character = child
+	#		break
+	
+	set_sprite_active()
+	get_other_checkpoints()
+	
+	if LevelInfo.player_character == null:
+		print("waiting..")
+		await get_tree().process_frame
+	
+	player_character = LevelInfo.player_character
 	
 	respawn_point = find_child("RespawnPoint", false) 
 	
 	if player_character == null or respawn_point == null:
 		set_process(false)
+		return
 	
 	# get the area of the save trigger
 	for child in get_children():
@@ -48,8 +63,6 @@ func _ready() -> void:
 	if is_active():
 		load_from_this_checkpoint()
 	
-	set_sprite_active()
-	get_other_checkpoints()
 
 func get_other_checkpoints():
 	
@@ -69,15 +82,21 @@ func activate_checkpoint(body: Node2D):
 	set_sprite_active()
 
 func load_checkpoint( load_next_checkpoint : bool):
+	print("checkpoint loaded")
+	print(check_point_number)
+	print("checkpoint loaded")
+
+	
 	var checkpoint_to_load = prev_checkpoint
 	if load_next_checkpoint:
 		checkpoint_to_load = next_checkpoint
 	
 	if checkpoint_to_load > 0:
 		LevelInfo.current_checkpoint = checkpoint_to_load
-		get_tree().reload_current_scene()
+		LevelInfo.main_scene.reload_level()
 
 func load_from_this_checkpoint():
+	
 	player_character.position = respawn_point.global_position
 	player_character.reset()
 

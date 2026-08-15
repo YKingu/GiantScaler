@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bvfxncd7rgq7r"]
+
+[ext_resource type="Script" uid="uid://hak56dfsh0l2" path="res://Scripts/EnemyBasic.gd" id="1_i1in5"]
+[ext_resource type="Texture2D" uid="uid://ckuocb3ofihjf" path="res://Assets/Sprites/images.jpg" id="2_wnyfr"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_lgosu"]
+points = PackedVector2Array(17.199999, -7.999998, 3.6, -10.799999, -1.3999996, -5, -1.7999997, 1.6000004, -0.19999981, 11, 15.599998, 8.4)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5gbxq"]
+
+[node name="Spider" type="Node2D" unique_id=353709359 node_paths=PackedStringArray("trigger_area", "spider_character_body")]
+script = ExtResource("1_i1in5")
+trigger_area = NodePath("Area2D")
+spider_character_body = NodePath("CharacterBody2D")
+speed = 16.0
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1672323905]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1918265635]
+scale = Vector2(5, 5)
+shape = SubResource("ConvexPolygonShape2D_lgosu")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=230722477]
+position = Vector2(15.000002, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=1465950907]
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_wnyfr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1061762019]
+scale = Vector2(0.8, 0.8)
+shape = SubResource("CircleShape2D_5gbxq")

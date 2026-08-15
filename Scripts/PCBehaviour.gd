@@ -31,6 +31,7 @@ var movement_inputs = {
 }
 
 func _ready() -> void:
+	LevelInfo.player_character = self
 	last_tile_position = position
 	set_energy(max_energy)
 
@@ -70,6 +71,11 @@ func _physics_process(delta: float) -> void:
 		Player_State.IDLE:
 			move_to_input()
 		Player_State.WALKING, Player_State.CLIMBING:
+			var goalposition : Vector2 = last_tile_position + (movement_vector * tile_size)
+			
+			if curr_player_state == Player_State.WALKING:
+				goalposition.y += tile_size
+			
 			velocity = movement_vector * walking_speed
 			if curr_player_state == Player_State.CLIMBING:
 				velocity = movement_vector * climbing_speed
@@ -119,8 +125,6 @@ func handle_animation():
 			change_animation_if_different("Climb")
 		Player_State.FALLING:
 			change_animation_if_different("Falling")
-			
-		
 
 func change_animation_if_different(new_animation: String):
 	
@@ -229,4 +233,4 @@ func reset():
 	movement_vector = Vector2.ZERO
 
 func die():
-	get_tree().reload_current_scene()
+	LevelInfo.main_scene.reload_level()

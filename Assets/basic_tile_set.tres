@@ -1,0 +1,49 @@
+[gd_resource type="TileSet" format=3 uid="uid://jod4yamqhgcs"]
+
+[ext_resource type="Texture2D" uid="uid://dcko6hd50shcb" path="res://Assets/Sprites/tiles_basic.png" id="1_opjio"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gbc2j"]
+texture = ExtResource("1_opjio")
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+0:0/0/custom_data_2 = 2
+0:0/0/custom_data_3 = 4
+0:0/0/custom_data_4 = 1
+1:0/0 = 0
+1:0/0/custom_data_0 = true
+1:0/0/custom_data_2 = -2
+1:0/0/custom_data_4 = -1
+2:0/0 = 0
+2:0/0/custom_data_0 = true
+2:0/0/custom_data_2 = 4
+2:0/0/custom_data_4 = 2
+2:0/0/custom_data_5 = true
+2:0/0/custom_data_6 = "slide_tile"
+0:1/0 = 0
+1:1/0 = 0
+1:1/0/custom_data_0 = true
+1:1/0/custom_data_1 = true
+2:1/0 = 0
+2:1/0/custom_data_0 = true
+2:1/0/custom_data_2 = 2
+2:1/0/custom_data_3 = 4
+2:1/0/custom_data_4 = 1
+2:1/0/custom_data_5 = true
+2:1/0/custom_data_6 = "crack_tile"
+
+[resource]
+custom_data_layer_0/name = "walkable"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "floor"
+custom_data_layer_1/type = 1
+custom_data_layer_2/name = "climb_up"
+custom_data_layer_2/type = 2
+custom_data_layer_3/name = "climb_down"
+custom_data_layer_3/type = 2
+custom_data_layer_4/name = "climb_sideways"
+custom_data_layer_4/type = 2
+custom_data_layer_5/name = "special_tile"
+custom_data_layer_5/type = 1
+custom_data_layer_6/name = "special_tile_name"
+custom_data_layer_6/type = 4
+sources/1 = SubResource("TileSetAtlasSource_gbc2j")
