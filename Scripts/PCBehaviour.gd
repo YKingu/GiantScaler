@@ -230,6 +230,7 @@ func reset():
 	last_tile_position = position
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
+	set_energy(max_energy)
 
 func die():
 	LevelInfo.main_scene.reload_level()

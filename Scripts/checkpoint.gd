@@ -13,8 +13,7 @@ var main_scene : MainScene
 
 func _ready() -> void:
 	
-	set_sprite_active()
-	
+	main_scene = LevelInfo.main_scene
 	respawn_point = find_child("RespawnPoint", false) 
 	
 	if respawn_point == null:
@@ -31,7 +30,7 @@ func _ready() -> void:
 		save_trigger.body_entered.connect(activate_checkpoint)
 
 func activate_checkpoint(body: Node2D):
-	LevelInfo.main_scene.set_checkpoint(self)
+	main_scene.set_checkpoint(self)
 	set_sprite_active()
 
 func load_from_this_checkpoint():
@@ -50,9 +49,11 @@ func load_from_this_checkpoint():
 	player_character.reset()
 
 func is_active() ->bool:
-	return LevelInfo.current_checkpoint == check_point_number
+	return main_scene.checkpoint_is_active(self)
 
 func set_sprite_active():
-	var temp_bool : bool = LevelInfo.current_checkpoint_number >= check_point_number
+	var temp_int := main_scene.compare_checkpoint(self)
+	
+	var temp_bool : bool = temp_int == 0 || temp_int == -1
 	sprite_active.visible = temp_bool
 	sprite_inactive.visible = !temp_bool
