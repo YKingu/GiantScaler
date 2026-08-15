@@ -34,8 +34,3 @@ func _physics_process(delta: float) -> void:
 		movementVector = (startpoint - spider_character_body.global_position).normalized()
 	spider_character_body.velocity = movementVector * speed
 	spider_character_body.move_and_slide()
-	var collision_object = spider_character_body.get_last_slide_collision()
-	
-	if collision_object != null:
-		if collision_object.get_collider() is PCBehaviour:
-			LevelInfo.main_scene.reload_level()

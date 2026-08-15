@@ -129,7 +129,6 @@ func handle_animation():
 func change_animation_if_different(new_animation: String):
 	
 	if sprite_animation.animation != new_animation:
-		print(sprite_animation.animation)
 		sprite_animation.animation = new_animation
 		sprite_animation.play()
 
