@@ -75,7 +75,7 @@ func _physics_process(delta: float) -> void:
 			
 			if curr_player_state == Player_State.WALKING:
 				goalposition.y += tile_size
-			
+			#test
 			velocity = movement_vector * walking_speed
 			if curr_player_state == Player_State.CLIMBING:
 				velocity = movement_vector * climbing_speed
