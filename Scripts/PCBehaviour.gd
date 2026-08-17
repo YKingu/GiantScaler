@@ -3,15 +3,17 @@ class_name PCBehaviour
 extends CharacterBody2D
 
 const tile_size : int = 16
-const walking_speed = 100.0
-const climbing_speed = 75.0
-const falling_speed = 400.0
-const max_energy = 20
+const walking_speed := 100.0
+const climbing_speed := 75.0
+const falling_speed := 400.0
+const max_energy := 20
+const tile_position_walking_offset := Vector2(0,-8)
 
 enum Player_State {IDLE, WALKING, CLIMBING, FALLING}
 var curr_player_state : Player_State = Player_State.IDLE
 
 var last_tile_position : Vector2 = Vector2.ZERO
+var tile_position_offset : Vector2 = Vector2.ZERO
 var movement_vector : Vector2 = Vector2.ZERO
 var movement_direction : String = ""
 var curr_energy : int = 0
@@ -31,9 +33,8 @@ var movement_inputs = {
 }
 
 func _ready() -> void:
-	LevelInfo.player_character = self
-	last_tile_position = position
-	set_energy(max_energy)
+	static_fields.player_character = self
+	reset()
 
 func move_step(movement_direction: String) -> bool:
 	self.movement_direction = movement_direction
@@ -42,16 +43,26 @@ func move_step(movement_direction: String) -> bool:
 	var next_tile_position : Vector2 = last_tile_position + (movement_vector *tile_size)
 	
 	var tile_data : TileData = get_tile_data_at_point(next_tile_position)
+	var tile_data_last : TileData = get_tile_data_at_point(last_tile_position)
 	
 	if tile_data == null:
 		reset_position_and_speed()
 		return false
 	
+	#ensures you can't walk sideways from floor to wall
+	if movement_direction == "move_left" || movement_direction == "move_right":
+		if tile_data.get_custom_data("walkable") && tile_data_last.get_custom_data("walkable"):
+			if tile_data.get_custom_data("floor") != tile_data_last.get_custom_data("floor"):
+				reset_position_and_speed()
+				return false
+	
 	if tile_data.get_custom_data("walkable"):
 		if tile_data.get_custom_data("floor"):
+			tile_position_offset = tile_position_walking_offset
 			curr_player_state = Player_State.WALKING
 			set_energy(max_energy)
 		else:
+			tile_position_offset = Vector2.ZERO
 			curr_player_state = Player_State.CLIMBING
 			if tile_data.get_custom_data("special_tile"):
 				handle_special_tile_pre(tile_data)
@@ -71,18 +82,16 @@ func _physics_process(delta: float) -> void:
 		Player_State.IDLE:
 			move_to_input()
 		Player_State.WALKING, Player_State.CLIMBING:
-			var goalposition : Vector2 = last_tile_position + (movement_vector * tile_size)
+			var goalposition : Vector2 = last_tile_position + (movement_vector * tile_size) 
+			goalposition += tile_position_offset
 			
-			if curr_player_state == Player_State.WALKING:
-				goalposition.y += tile_size
-			#test
 			velocity = movement_vector * walking_speed
 			if curr_player_state == Player_State.CLIMBING:
 				velocity = movement_vector * climbing_speed
 			
-			var velocity_this_frame: Vector2 = velocity * delta
-			var position_next_frame: Vector2 = position + velocity_this_frame
-			if (position_next_frame - last_tile_position).length() > tile_size:
+			var velocity_this_frame: float = abs((velocity * delta).length())
+			var distance_to_tile: float = abs((goalposition - position).length())
+			if velocity_this_frame >= distance_to_tile:
 				arrive_at_tile(last_tile_position + (movement_vector * tile_size))
 			else:
 				move_and_slide()
@@ -95,6 +104,7 @@ func _physics_process(delta: float) -> void:
 				last_tile_position += Vector2.DOWN * tile_size
 				var new_tile_data := get_tile_data_at_point(last_tile_position)
 				if new_tile_data.get_custom_data("floor"):
+					tile_position_offset = tile_position_walking_offset
 					set_energy(max_energy)
 					reset_position_and_speed()
 				else:
@@ -156,7 +166,7 @@ func fall_down():
 	curr_player_state = Player_State.FALLING
 
 func reset_position_and_speed():
-	position = last_tile_position
+	position = last_tile_position + tile_position_offset
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
 
@@ -231,6 +241,9 @@ func reset():
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
 	set_energy(max_energy)
+	if get_tile_data_at_point(position).get_custom_data("floor"):
+		tile_position_offset = tile_position_walking_offset
+	arrive_at_tile(position)
 
 func die():
-	LevelInfo.main_scene.reload_level()
+	static_fields.main_scene.reload_level()

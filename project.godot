@@ -17,7 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-LevelInfo="*uid://bwwtddornw32e"
+static_fields="*uid://bwwtddornw32e"
+static_functions="*uid://b58lkry6y37rr"
 
 [display]
 

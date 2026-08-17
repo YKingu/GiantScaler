@@ -1,5 +1,5 @@
 
-class_name LevelInfoFields
+class_name StaticFields
 
 extends Node
 

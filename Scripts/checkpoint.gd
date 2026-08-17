@@ -13,7 +13,7 @@ var main_scene : MainScene
 
 func _ready() -> void:
 	
-	main_scene = LevelInfo.main_scene
+	main_scene = static_fields.main_scene 
 	respawn_point = find_child("RespawnPoint", false) 
 	
 	if respawn_point == null:
@@ -37,10 +37,10 @@ func load_from_this_checkpoint():
 	
 	var player_character : PCBehaviour
 	
-	if LevelInfo.player_character == null:
+	if static_fields.player_character == null:
 		await get_tree().process_frame
 	
-	player_character = LevelInfo.player_character
+	player_character = static_fields.player_character
 	
 	if player_character == null:
 		return

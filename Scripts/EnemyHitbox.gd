@@ -8,4 +8,4 @@ func _physics_process(delta: float) -> void:
 	
 	if collision_object != null: 
 		if collision_object.get_collider() is PCBehaviour:
-			LevelInfo.main_scene.reload_level()
+			static_fields.main_scene.reload_level()

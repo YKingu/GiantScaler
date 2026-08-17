@@ -10,7 +10,7 @@ var current_checkpoint_index : int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	LevelInfo.main_scene = self
+	static_fields.main_scene = self
 	instantiate_level("res://Scenes/level1.tscn")
 
 func _input(event):
@@ -47,7 +47,7 @@ func get_checkpoints():
 	
 	checkpoints.clear()
 	
-	for child in get_all_child_nodes(current_scene):
+	for child in static_functions.get_all_child_nodes(current_scene):
 		if child is Checkpoint:
 			var added_checkpoint = false
 			for i in checkpoints.size():
@@ -120,13 +120,3 @@ func compare_checkpoint(checkpoint_to_check : Checkpoint) -> int:
 
 func reload_level():
 	instantiate_level(current_scene_string)
-
-func get_all_child_nodes(node : Node) -> Array[Node]:
-	
-	var return_array := node.get_children()
-	
-	for child in node.get_children():
-		if child.get_child_count() > 0:
-			return_array.append_array(get_all_child_nodes(child))
-	
-	return return_array
