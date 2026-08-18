@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bcc4depatgha4"]
+
+[ext_resource type="PackedScene" uid="uid://dw1c8dafggngg" path="res://Scenes/player_character.tscn" id="1_40xaf"]
+[ext_resource type="Texture2D" uid="uid://djepcmyvk1h7a" path="res://Assets/Sprites/pixelCircle.png" id="2_ydg3l"]
+
+[node name="EnergyTest" type="Node2D" unique_id=154601339]
+
+[node name="PlayerCharacter" parent="." unique_id=511711406 instance=ExtResource("1_40xaf")]
+
+[node name="PixelCircle" type="Sprite2D" parent="." unique_id=898310623]
+position = Vector2(0, -13)
+texture = ExtResource("2_ydg3l")
