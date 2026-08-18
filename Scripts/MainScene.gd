@@ -75,7 +75,7 @@ func load_new_checkpoint(load_next_checkpoint : bool):
 	else:
 		new_checkpoint_index -= 1
 		if new_checkpoint_index < 0: 
-			new_checkpoint_index = 0
+			new_checkpoint_index = 0 
 	
 	current_checkpoint_index = new_checkpoint_index
 	load_checkpoint()

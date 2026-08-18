@@ -7,10 +7,11 @@ const walking_speed := 100.0
 const climbing_speed := 75.0
 const falling_speed := 400.0
 const max_energy := 20
-const tile_position_walking_offset := Vector2(0,-8)
+const tile_position_walking_offset := Vector2(0,-7)
 
-enum Player_State {IDLE, WALKING, CLIMBING, FALLING}
+enum Player_State {IDLE, WALKING, CLIMBING, FALLING, FLAT}
 var curr_player_state : Player_State = Player_State.IDLE
+var movement_forced := false
 
 var last_tile_position : Vector2 = Vector2.ZERO
 var tile_position_offset : Vector2 = Vector2.ZERO
@@ -36,39 +37,58 @@ func _ready() -> void:
 	static_fields.player_character = self
 	reset()
 
-func move_step(movement_direction: String) -> bool:
-	self.movement_direction = movement_direction
-	movement_vector = movement_inputs[movement_direction]
+func _physics_process(delta: float) -> void:
 	
-	var next_tile_position : Vector2 = last_tile_position + (movement_vector *tile_size)
+	if curr_player_state == Player_State.IDLE:
+		move_to_input()
+	
+	if curr_player_state != Player_State.FALLING && curr_player_state != Player_State.FLAT:
+		camera.position = self.position
+		
+	handle_animation()
+
+func move_to_input():
+	if curr_player_state == Player_State.IDLE:
+		for movement_input in movement_inputs.keys():
+			if Input.is_action_pressed(movement_input):
+				if move_step(movement_input):
+					break
+
+func move_step(new_movement_direction: String) -> bool:
+	
+	var new_movement_vector : Vector2 = movement_inputs[new_movement_direction]
+	
+	var next_tile_position : Vector2 = last_tile_position + (new_movement_vector *tile_size)
 	
 	var tile_data : TileData = get_tile_data_at_point(next_tile_position)
 	var tile_data_last : TileData = get_tile_data_at_point(last_tile_position)
 	
+	#can't move to empty tile
 	if tile_data == null:
 		reset_position_and_speed()
 		return false
 	
 	#ensures you can't walk sideways from floor to wall
-	if movement_direction == "move_left" || movement_direction == "move_right":
+	if new_movement_direction == "move_left" || new_movement_direction == "move_right":
 		if tile_data.get_custom_data("walkable") && tile_data_last.get_custom_data("walkable"):
 			if tile_data.get_custom_data("floor") != tile_data_last.get_custom_data("floor"):
 				reset_position_and_speed()
 				return false
 	
+	
 	if tile_data.get_custom_data("walkable"):
+		
+		#set new movement direction
+		movement_direction = new_movement_direction
+		movement_vector = new_movement_vector
+		
 		if tile_data.get_custom_data("floor"):
-			tile_position_offset = tile_position_walking_offset
 			curr_player_state = Player_State.WALKING
 			set_energy(max_energy)
+			move_coroutine(next_tile_position, walking_speed)
 		else:
-			tile_position_offset = Vector2.ZERO
 			curr_player_state = Player_State.CLIMBING
-			if tile_data.get_custom_data("special_tile"):
-				handle_special_tile_pre(tile_data)
-			else:
-				var energy_consumption := get_energy_consumption(tile_data, movement_direction)
-				set_energy(curr_energy - energy_consumption)
+			move_coroutine(next_tile_position, climbing_speed)
 		
 	else:
 		reset_position_and_speed()
@@ -76,49 +96,89 @@ func move_step(movement_direction: String) -> bool:
 	
 	return true
 
-func _physics_process(delta: float) -> void:
+func move_coroutine(next_tile_position : Vector2, movement_speed : float):
 	
-	match curr_player_state:
-		Player_State.IDLE:
-			move_to_input()
-		Player_State.WALKING, Player_State.CLIMBING:
-			var goalposition : Vector2 = last_tile_position + (movement_vector * tile_size) 
-			goalposition += tile_position_offset
-			
-			velocity = movement_vector * walking_speed
-			if curr_player_state == Player_State.CLIMBING:
-				velocity = movement_vector * climbing_speed
-			
-			var velocity_this_frame: float = abs((velocity * delta).length())
-			var distance_to_tile: float = abs((goalposition - position).length())
-			if velocity_this_frame >= distance_to_tile:
-				arrive_at_tile(last_tile_position + (movement_vector * tile_size))
-			else:
-				move_and_slide()
-		Player_State.FALLING:
-			velocity = falling_speed * Vector2.DOWN
-			
-			var velocity_this_frame: Vector2 = velocity * delta
-			var position_next_frame: Vector2 = position + velocity_this_frame
-			if (position_next_frame - last_tile_position).length() > tile_size:
-				last_tile_position += Vector2.DOWN * tile_size
-				var new_tile_data := get_tile_data_at_point(last_tile_position)
-				if new_tile_data.get_custom_data("floor"):
-					tile_position_offset = tile_position_walking_offset
-					set_energy(max_energy)
-					reset_position_and_speed()
-				else:
-					move_and_slide()
-			else:
-				move_and_slide()
-			
-			if abs((fall_start_tile_position - last_tile_position).y) > 11 * tile_size:
-				die()
+	set_position_offset(next_tile_position)
 	
-	if curr_player_state != Player_State.FALLING:
-		camera.position = self.position
+	var destination := next_tile_position + tile_position_offset
+	var distance_to_destination : Vector2 = destination - position
+	var delta_speed : float = get_physics_process_delta_time() * movement_speed
+	var local_movement_forced := movement_forced
+	
+	var i := 0
+	
+	while( distance_to_destination.length() > delta_speed ):
 		
-	handle_animation()
+		#two frames of bullet time, to cancel input so you don't climb automatically
+		if i == 2:
+			if !local_movement_forced && curr_player_state == Player_State.CLIMBING:
+				if !Input.is_action_pressed(movement_direction):
+					reset_position_and_speed()
+					return
+			handle_tile_behaviour(next_tile_position)
+		
+		velocity = (destination - position).normalized() * movement_speed
+		move_and_slide()
+		await get_tree().physics_frame
+		delta_speed = get_physics_process_delta_time() * movement_speed
+		distance_to_destination = destination - position
+		i+=1
+	
+	arrive_at_tile(next_tile_position)
+
+func handle_tile_behaviour(next_tile_position : Vector2):
+	
+	var tile_data : TileData = get_tile_data_at_point(next_tile_position)
+	
+	if tile_data.get_custom_data("special_tile"):
+		handle_special_tile_pre(tile_data)
+	else:
+		var energy_consumption := get_energy_consumption(tile_data, movement_direction)
+		set_energy(curr_energy - energy_consumption)
+
+func arrive_at_tile(new_tile_position : Vector2):
+	
+	set_last_tile_position( new_tile_position )
+	
+	var tile_data = get_tile_data_at_point(new_tile_position)
+	
+	if curr_player_state == Player_State.FALLING:
+		if tile_data.get_custom_data("floor"):
+			set_energy(max_energy)
+			movement_forced = false
+			reset_position_and_speed()
+			move_camera_coroutine()
+		else:
+			move_coroutine(last_tile_position + (Vector2.DOWN * tile_size), falling_speed)
+			if abs((fall_start_tile_position - last_tile_position).y) > 9 * tile_size:
+				die()
+		return
+	
+	if curr_energy <= 0:
+		reset_position_and_speed()
+		fall_down()
+		return
+	
+	if tile_data.get_custom_data("special_tile"):
+		if handle_special_tile_post(tile_data.get_custom_data("special_tile_name")):
+			return
+	
+	if Input.is_action_pressed(movement_direction):
+		if move_step(movement_direction):
+			#move_and_slide()
+			pass
+	else:
+		reset_position_and_speed()
+
+func move_camera_coroutine():
+	var camera_movement_speed := 300.0
+	curr_player_state = Player_State.FLAT
+	
+	while (position - camera.position).y > get_physics_process_delta_time() * camera_movement_speed:
+		camera.move_local_y(get_physics_process_delta_time() * camera_movement_speed)
+		await get_tree().physics_frame
+	
+	reset_position_and_speed()
 
 func handle_animation():
 	match curr_player_state:
@@ -135,6 +195,8 @@ func handle_animation():
 			change_animation_if_different("Climb")
 		Player_State.FALLING:
 			change_animation_if_different("Falling")
+		Player_State.FLAT:
+			change_animation_if_different("Idle")
 
 func change_animation_if_different(new_animation: String):
 	
@@ -142,45 +204,16 @@ func change_animation_if_different(new_animation: String):
 		sprite_animation.animation = new_animation
 		sprite_animation.play()
 
-func arrive_at_tile(new_tile_position : Vector2):
-	last_tile_position = new_tile_position
-	if curr_energy <= 0:
-		reset_position_and_speed()
-		fall_down()
-		return
-	
-	var tile_data = get_tile_data_at_point(new_tile_position)
-	
-	if tile_data.get_custom_data("special_tile"):
-		if handle_special_tile_post(tile_data.get_custom_data("special_tile_name")):
-			return
-	
-	if Input.is_action_pressed(movement_direction):
-		if move_step(movement_direction):
-			move_and_slide()
-	else:
-		reset_position_and_speed()
-
 func fall_down():
 	fall_start_tile_position = last_tile_position
 	curr_player_state = Player_State.FALLING
+	movement_forced = true
+	move_coroutine(last_tile_position + (Vector2.DOWN * tile_size), falling_speed)
 
 func reset_position_and_speed():
 	position = last_tile_position + tile_position_offset
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
-
-func move_to_input():
-	for movement_input in movement_inputs.keys():
-		if Input.is_action_just_pressed(movement_input):
-			if move_step(movement_input):
-				break
-	
-	if curr_player_state == Player_State.IDLE:
-		for movement_input in movement_inputs.keys():
-			if Input.is_action_pressed(movement_input):
-				if move_step(movement_input):
-					break
 
 func get_tile_data_at_point(cell_data_point : Vector2) -> TileData:
 	var cell := tilemap.local_to_map(cell_data_point)
@@ -229,7 +262,9 @@ func handle_special_tile_post(special_tile_name : String) -> bool:
 				var next_tile_position: Vector2 = last_tile_position + (Vector2.DOWN * tile_size)
 				var tile_data = get_tile_data_at_point(next_tile_position)
 				if tile_data.get_custom_data("walkable"):
+					movement_forced = true
 					move_step("move_down")
+					movement_forced = false
 				else:
 					fall_down()
 				return true
@@ -237,13 +272,38 @@ func handle_special_tile_post(special_tile_name : String) -> bool:
 	return false
 
 func reset():
-	last_tile_position = position
+	#resets playercharacter
+	set_last_tile_position(position)
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
 	set_energy(max_energy)
-	if get_tile_data_at_point(position).get_custom_data("floor"):
+	set_position_offset(last_tile_position)
+	arrive_at_tile(last_tile_position)
+
+func set_position_offset(offset_at : Vector2):
+	if get_tile_data_at_point(offset_at).get_custom_data("floor"):
 		tile_position_offset = tile_position_walking_offset
-	arrive_at_tile(position)
+	else:
+		tile_position_offset = Vector2.ZERO
 
 func die():
 	static_fields.main_scene.reload_level()
+
+func set_last_tile_position(new_position : Vector2):
+	#makes sure the tile position is always in the grid
+	last_tile_position = align_coordinates_to_grid(new_position)
+
+func align_coordinates_to_grid(coordinates : Vector2) -> Vector2:
+	#aligns coordinate, so they are in the middle of a grid square
+	
+	coordinates.x = align_number_to_grid(coordinates.x)
+	coordinates.y = align_number_to_grid(coordinates.y)
+	
+	return coordinates
+
+func align_number_to_grid(number : float) -> float:
+	#aligns number, so it is a coordinate in the middle of a grid square
+	var rest_number := fposmod( number, tile_size )
+	rest_number -= (tile_size * 1.0) / 2.0
+	
+	return number - rest_number
