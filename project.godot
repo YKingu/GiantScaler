@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 static_fields="*uid://bwwtddornw32e"
 static_functions="*uid://b58lkry6y37rr"
+BetterTerrain="*uid://c4rrauvwcrvhu"
 
 [display]
 
@@ -37,6 +38,10 @@ project/assembly_name="GiantScaler"
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/better-terrain/plugin.cfg")
 
 [input]
 

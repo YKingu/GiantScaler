@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://cqec7f0v82jv7" path="res://Assets/Sprites/depositphotos_20030237-stock-photo-cheerful-young-man-over-white.jpg" id="2_pb3n0"]
 [ext_resource type="Texture2D" uid="uid://6vai33vo7p7i" path="res://Assets/Sprites/stock-photo-angry-man-screaming-17451718.jpg" id="3_ons1q"]
 [ext_resource type="Texture2D" uid="uid://dbnbeee0l7oq7" path="res://Assets/Sprites/animations/pc_sheet.png" id="4_ajo0r"]
-[ext_resource type="Texture2D" uid="uid://bj6ia7udb1xvj" path="res://Assets/Sprites/pixelCircle.png" id="5_pb3n0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wdx0"]
 size = Vector2(736.06726, 750.00024)
@@ -166,9 +165,3 @@ sprite_frames = SubResource("SpriteFrames_5gbxq")
 animation = &"Idle"
 frame_progress = 0.9064738
 offset = Vector2(0, -8)
-
-[node name="Node2D" type="Node2D" parent="CharacterBody2D" unique_id=1514775341]
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D/Node2D" unique_id=198960768]
-position = Vector2(0, -13)
-texture = ExtResource("5_pb3n0")

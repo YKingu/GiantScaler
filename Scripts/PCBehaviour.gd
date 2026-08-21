@@ -110,12 +110,13 @@ func move_coroutine(next_tile_position : Vector2, movement_speed : float):
 	while( distance_to_destination.length() > delta_speed ):
 		
 		#two frames of bullet time, to cancel input so you don't climb automatically
-		if i == 2:
+		if i <= 2:
 			if !local_movement_forced && curr_player_state == Player_State.CLIMBING:
 				if !Input.is_action_pressed(movement_direction):
 					reset_position_and_speed()
 					return
-			handle_tile_behaviour(next_tile_position)
+			if i == 2:
+				handle_tile_behaviour(next_tile_position)
 		
 		velocity = (destination - position).normalized() * movement_speed
 		move_and_slide()
@@ -211,6 +212,7 @@ func fall_down():
 	move_coroutine(last_tile_position + (Vector2.DOWN * tile_size), falling_speed)
 
 func reset_position_and_speed():
+	set_position_offset(last_tile_position)
 	position = last_tile_position + tile_position_offset
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
