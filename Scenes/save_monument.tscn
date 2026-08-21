@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cx8qoqyyleksp"]
 
-[ext_resource type="Script" uid="uid://klo8wxp31nm7" path="res://Scripts/CheckpointB.gd" id="1_gpdg1"]
+[ext_resource type="Script" uid="uid://klo8wxp31nm7" path="res://Scripts/Checkpoint.gd" id="1_gpdg1"]
 [ext_resource type="Texture2D" uid="uid://cko730ehklqdd" path="res://Assets/Sprites/save monument.png" id="2_q6ib4"]
 [ext_resource type="Texture2D" uid="uid://d0gic33e4ngkv" path="res://Assets/Sprites/save monument light.png" id="3_w5125"]
 [ext_resource type="Texture2D" uid="uid://cpelc12124bv8" path="res://Assets/Sprites/save monument lit.png" id="4_qm8t2"]
