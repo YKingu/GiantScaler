@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6vai33vo7p7i"
-path="res://.godot/imported/stock-photo-angry-man-screaming-17451718.jpg-e80200b5a92ee0858a18eaf02713cb65.ctex"
+uid="uid://73msqyuj8sd5"
+path="res://.godot/imported/spritesheet_crack.png-39f65a8f49ac8b4867bca872226792ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/stock-photo-angry-man-screaming-17451718.jpg"
-dest_files=["res://.godot/imported/stock-photo-angry-man-screaming-17451718.jpg-e80200b5a92ee0858a18eaf02713cb65.ctex"]
+source_file="res://Assets/Sprites/Spritesheets/spritesheet_crack.png"
+dest_files=["res://.godot/imported/spritesheet_crack.png-39f65a8f49ac8b4867bca872226792ef.ctex"]
 
 [params]
 

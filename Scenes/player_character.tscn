@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dw1c8dafggngg"]
 
 [ext_resource type="Script" uid="uid://b7au3sdmry4q4" path="res://Scripts/PCBehaviour.gd" id="1_wko77"]
-[ext_resource type="Texture2D" uid="uid://cqec7f0v82jv7" path="res://Assets/Sprites/depositphotos_20030237-stock-photo-cheerful-young-man-over-white.jpg" id="2_pb3n0"]
-[ext_resource type="Texture2D" uid="uid://6vai33vo7p7i" path="res://Assets/Sprites/stock-photo-angry-man-screaming-17451718.jpg" id="3_ons1q"]
 [ext_resource type="Texture2D" uid="uid://dbnbeee0l7oq7" path="res://Assets/Sprites/animations/pc_sheet.png" id="4_ajo0r"]
+[ext_resource type="Script" uid="uid://bd6wpj5ryaynd" path="res://Scenes/EnergyDisplay.gd" id="5_ons1q"]
+[ext_resource type="Texture2D" uid="uid://dgk2l12kp5rhi" path="res://Assets/Sprites/energy_circle_big.png" id="6_ajo0r"]
+[ext_resource type="Texture2D" uid="uid://cihvmlqo84fuc" path="res://Assets/Sprites/energy_circle_small.png" id="7_ajo0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wdx0"]
 size = Vector2(736.06726, 750.00024)
@@ -127,30 +128,13 @@ text = "0
 
 "
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1840962889 node_paths=PackedStringArray("energy_label", "sprite_animation", "camera")]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1840962889 node_paths=PackedStringArray("energy_label", "sprite_animation", "camera", "energy_display")]
 y_sort_enabled = true
 script = ExtResource("1_wko77")
 energy_label = NodePath("../Camera2D/Label2")
 sprite_animation = NodePath("AnimatedSprite2D")
 camera = NodePath("../Camera2D")
-
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=1464983659]
-visible = false
-z_index = 1
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, 6.9999995)
-scale = Vector2(0.02, 0.014)
-texture = ExtResource("2_pb3n0")
-offset = Vector2(0, -499.99994)
-
-[node name="Sprite2D2" type="Sprite2D" parent="CharacterBody2D" unique_id=514617826]
-visible = false
-z_index = 1
-position = Vector2(7.1525574e-07, 8.000001)
-scale = Vector2(0.02434626, 0.0175)
-texture = ExtResource("3_ons1q")
-offset = Vector2(20.537048, -514.28577)
+energy_display = NodePath("EnergyDisplay")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1821582755]
 scale = Vector2(0.02, 0.02)
@@ -165,3 +149,72 @@ sprite_frames = SubResource("SpriteFrames_5gbxq")
 animation = &"Idle"
 frame_progress = 0.9064738
 offset = Vector2(0, -8)
+
+[node name="EnergyDisplay" type="Node2D" parent="CharacterBody2D" unique_id=1826727898 node_paths=PackedStringArray("sprite_small_reference", "sprite_big_reference", "energy_sprites")]
+modulate = Color(0.44999993, 1, 0.39999998, 0.49411765)
+z_index = 100
+script = ExtResource("5_ons1q")
+sprite_small_reference = NodePath("EnergyCircleSmallReference")
+sprite_big_reference = NodePath("EnergyCircleBigReference")
+energy_sprites = [NodePath("EnergyCircleBig"), NodePath("EnergyCircleBig2"), NodePath("EnergyCircleBig3"), NodePath("EnergyCircleBig4"), NodePath("EnergyCircleBig5"), NodePath("EnergyCircleBig6"), NodePath("EnergyCircleBig7"), NodePath("EnergyCircleBig8"), NodePath("EnergyCircleBig9"), NodePath("EnergyCircleBig10")]
+
+[node name="EnergyCircleSmallReference" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=14910962]
+visible = false
+position = Vector2(6, -21)
+texture = ExtResource("7_ajo0r")
+
+[node name="EnergyCircleBigReference" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=481359895]
+visible = false
+position = Vector2(-3, -22)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=936525769]
+position = Vector2(-3, -22)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig2" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=2015149188]
+position = Vector2(8, -18)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig3" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=328619462]
+position = Vector2(15, -9)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig4" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=1649512244]
+position = Vector2(15, 3)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig5" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=944881327]
+position = Vector2(9, 12)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig6" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=1428705327]
+position = Vector2(-3, 16)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig7" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=1746853406]
+position = Vector2(-14, 12)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig8" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=1989568202]
+position = Vector2(-21, 3)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig9" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=305203282]
+position = Vector2(-21, -9)
+texture = ExtResource("6_ajo0r")
+centered = false
+
+[node name="EnergyCircleBig10" type="Sprite2D" parent="CharacterBody2D/EnergyDisplay" unique_id=567979848]
+position = Vector2(-14, -18)
+texture = ExtResource("6_ajo0r")
+centered = false

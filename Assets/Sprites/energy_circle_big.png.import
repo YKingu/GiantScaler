@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqec7f0v82jv7"
-path="res://.godot/imported/depositphotos_20030237-stock-photo-cheerful-young-man-over-white.jpg-a5ff4c18e97c7f7d9c3fd96691767261.ctex"
+uid="uid://dgk2l12kp5rhi"
+path="res://.godot/imported/energy_circle_big.png-5066891f65b8775d513b44e29e098fef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/depositphotos_20030237-stock-photo-cheerful-young-man-over-white.jpg"
-dest_files=["res://.godot/imported/depositphotos_20030237-stock-photo-cheerful-young-man-over-white.jpg-a5ff4c18e97c7f7d9c3fd96691767261.ctex"]
+source_file="res://Assets/Sprites/energy_circle_big.png"
+dest_files=["res://.godot/imported/energy_circle_big.png-5066891f65b8775d513b44e29e098fef.ctex"]
 
 [params]
 

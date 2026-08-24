@@ -23,6 +23,7 @@ var curr_energy : int = 0
 @export var energy_label : Label
 @export var sprite_animation : AnimatedSprite2D
 @export var camera : Camera2D
+@export var energy_display : EnergyDisplay
 
 var fall_start_tile_position : Vector2 = Vector2.ZERO
 
@@ -46,6 +47,7 @@ func _physics_process(delta: float) -> void:
 		camera.position = self.position
 		
 	handle_animation()
+	handle_energy_display_visibility()
 
 func move_to_input():
 	if curr_player_state == Player_State.IDLE:
@@ -157,6 +159,7 @@ func arrive_at_tile(new_tile_position : Vector2):
 	
 	if curr_energy <= 0:
 		reset_position_and_speed()
+		camera.position = position
 		fall_down()
 		return
 	
@@ -164,10 +167,12 @@ func arrive_at_tile(new_tile_position : Vector2):
 		if handle_special_tile_post(tile_data.get_custom_data("special_tile_name")):
 			return
 	
-	if Input.is_action_pressed(movement_direction):
-		if move_step(movement_direction):
-			#move_and_slide()
-			pass
+	#only reset speed, if you arent proceeding in the same direction
+	if movement_direction != "":
+		if Input.is_action_pressed(movement_direction):
+			move_step(movement_direction)
+		else:
+			reset_position_and_speed()
 	else:
 		reset_position_and_speed()
 
@@ -181,6 +186,13 @@ func move_camera_coroutine():
 	
 	reset_position_and_speed()
 
+func handle_energy_display_visibility():
+	var current_tile : TileData = get_tile_data_at_point(self.position)
+	if current_tile.get_custom_data("floor"):
+		energy_display.visible = false
+	else:
+		energy_display.visible = true
+
 func handle_animation():
 	match curr_player_state:
 		Player_State.IDLE:
@@ -190,7 +202,6 @@ func handle_animation():
 			else:
 				change_animation_if_different("ClimbIdle")
 		Player_State.WALKING:
-			var current_tile : TileData = get_tile_data_at_point(self.position)
 			change_animation_if_different("Idle")
 		Player_State.CLIMBING:
 			change_animation_if_different("Climb")
@@ -237,6 +248,7 @@ func get_energy_consumption(tile_data : TileData, movement_direction:String) -> 
 
 func set_energy(energy : int):
 	energy = clamp(energy, 0, max_energy)
+	energy_display.set_energy(energy)
 	curr_energy = energy
 	energy_label.text = str(curr_energy/2.0)
 

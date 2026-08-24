@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bj6ia7udb1xvj"
-path="res://.godot/imported/pixelCircle.png-4e39498f22c732523459f5c529824b1d.ctex"
+uid="uid://dfyc0npkn0lha"
+path="res://.godot/imported/spritesheet_line_wall_transition.png-04952253027818cf8d8dfd9041716879.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/pixelCircle.png"
-dest_files=["res://.godot/imported/pixelCircle.png-4e39498f22c732523459f5c529824b1d.ctex"]
+source_file="res://Assets/Sprites/Spritesheets/spritesheet_line_wall_transition.png"
+dest_files=["res://.godot/imported/spritesheet_line_wall_transition.png-04952253027818cf8d8dfd9041716879.ctex"]
 
 [params]
 

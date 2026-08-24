@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvvicjulb6m4d"
-path="res://.godot/imported/Spritesheet.png-092431a56fef81204ce8a99a0aee529f.ctex"
+uid="uid://ddhntej4ic512"
+path="res://.godot/imported/spritesheet_line_divided.png-57bb28cd95297afcd053af17286362a9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Spritesheet.png"
-dest_files=["res://.godot/imported/Spritesheet.png-092431a56fef81204ce8a99a0aee529f.ctex"]
+source_file="res://Assets/Sprites/Spritesheets/spritesheet_line_divided.png"
+dest_files=["res://.godot/imported/spritesheet_line_divided.png-57bb28cd95297afcd053af17286362a9.ctex"]
 
 [params]
 
