@@ -1,0 +1,69 @@
+[gd_resource type="TileSet" format=3 uid="uid://cl1e5rej48523"]
+
+[ext_resource type="Texture2D" uid="uid://bfjwe4bgiescm" path="res://Assets/Sprites/Spritesheets/spritesheet_ledge.png" id="1_rf7nj"]
+[ext_resource type="Texture2D" uid="uid://ddhntej4ic512" path="res://Assets/Sprites/Spritesheets/spritesheet_line_divided.png" id="2_anwew"]
+[ext_resource type="Texture2D" uid="uid://dfyc0npkn0lha" path="res://Assets/Sprites/Spritesheets/spritesheet_line_wall_transition.png" id="3_prro3"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_shjlr"]
+texture = ExtResource("1_rf7nj")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l837f"]
+texture = ExtResource("2_anwew")
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8i0wg"]
+texture = ExtResource("3_prro3")
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_shjlr")
+sources/1 = SubResource("TileSetAtlasSource_l837f")
+sources/2 = SubResource("TileSetAtlasSource_8i0wg")

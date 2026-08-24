@@ -19,7 +19,7 @@ var movement_vector : Vector2 = Vector2.ZERO
 var movement_direction : String = ""
 var curr_energy : int = 0
 
-@export var tilemap : TileMapLayer
+@export var tilemap_control : TileMapControl
 @export var energy_label : Label
 @export var sprite_animation : AnimatedSprite2D
 @export var camera : Camera2D
@@ -62,29 +62,18 @@ func move_step(new_movement_direction: String) -> bool:
 	
 	var next_tile_position : Vector2 = last_tile_position + (new_movement_vector *tile_size)
 	
-	var tile_data : TileData = get_tile_data_at_point(next_tile_position)
-	var tile_data_last : TileData = get_tile_data_at_point(last_tile_position)
-	
 	#can't move to empty tile
-	if tile_data == null:
+	if !tilemap_control.step_is_traversable(last_tile_position, next_tile_position, new_movement_direction):
 		reset_position_and_speed()
 		return false
 	
-	#ensures you can't walk sideways from floor to wall
-	if new_movement_direction == "move_left" || new_movement_direction == "move_right":
-		if tile_data.get_custom_data("walkable") && tile_data_last.get_custom_data("walkable"):
-			if tile_data.get_custom_data("floor") != tile_data_last.get_custom_data("floor"):
-				reset_position_and_speed()
-				return false
-	
-	
-	if tile_data.get_custom_data("walkable"):
+	if tilemap_control.point_is_traversable(next_tile_position):
 		
 		#set new movement direction
 		movement_direction = new_movement_direction
 		movement_vector = new_movement_vector
 		
-		if tile_data.get_custom_data("floor"):
+		if tilemap_control.point_is_floor(next_tile_position):
 			curr_player_state = Player_State.WALKING
 			set_energy(max_energy)
 			move_coroutine(next_tile_position, walking_speed)
@@ -131,22 +120,20 @@ func move_coroutine(next_tile_position : Vector2, movement_speed : float):
 
 func handle_tile_behaviour(next_tile_position : Vector2):
 	
-	var tile_data : TileData = get_tile_data_at_point(next_tile_position)
+	var special_tile_name := tilemap_control.get_special_tile_name(next_tile_position)
 	
-	if tile_data.get_custom_data("special_tile"):
-		handle_special_tile_pre(tile_data)
+	if special_tile_name != "":
+		handle_special_tile_pre(next_tile_position, special_tile_name)
 	else:
-		var energy_consumption := get_energy_consumption(tile_data, movement_direction)
+		var energy_consumption := tilemap_control.get_energy_consumption(next_tile_position, movement_direction)
 		set_energy(curr_energy - energy_consumption)
 
 func arrive_at_tile(new_tile_position : Vector2):
 	
 	set_last_tile_position( new_tile_position )
 	
-	var tile_data = get_tile_data_at_point(new_tile_position)
-	
 	if curr_player_state == Player_State.FALLING:
-		if tile_data.get_custom_data("floor"):
+		if tilemap_control.point_is_floor(new_tile_position):
 			set_energy(max_energy)
 			movement_forced = false
 			reset_position_and_speed()
@@ -163,8 +150,10 @@ func arrive_at_tile(new_tile_position : Vector2):
 		fall_down()
 		return
 	
-	if tile_data.get_custom_data("special_tile"):
-		if handle_special_tile_post(tile_data.get_custom_data("special_tile_name")):
+	var special_tile_name := tilemap_control.get_special_tile_name(new_tile_position)
+	
+	if special_tile_name != "":
+		if handle_special_tile_post(new_tile_position, special_tile_name):
 			return
 	
 	#only reset speed, if you arent proceeding in the same direction
@@ -187,8 +176,7 @@ func move_camera_coroutine():
 	reset_position_and_speed()
 
 func handle_energy_display_visibility():
-	var current_tile : TileData = get_tile_data_at_point(self.position)
-	if current_tile.get_custom_data("floor"):
+	if tilemap_control.point_is_floor(self.position):
 		energy_display.visible = false
 	else:
 		energy_display.visible = true
@@ -196,8 +184,7 @@ func handle_energy_display_visibility():
 func handle_animation():
 	match curr_player_state:
 		Player_State.IDLE:
-			var current_tile : TileData = get_tile_data_at_point(self.position)
-			if current_tile.get_custom_data("floor"):
+			if tilemap_control.point_is_floor(self.position):
 				change_animation_if_different("Idle")
 			else:
 				change_animation_if_different("ClimbIdle")
@@ -228,54 +215,32 @@ func reset_position_and_speed():
 	curr_player_state = Player_State.IDLE
 	movement_vector = Vector2.ZERO
 
-func get_tile_data_at_point(cell_data_point : Vector2) -> TileData:
-	var cell := tilemap.local_to_map(cell_data_point)
-	var return_data : TileData = tilemap.get_cell_tile_data(cell)
-	
-	return return_data
-
-func get_energy_consumption(tile_data : TileData, movement_direction:String) -> int:
-	var propertyName : String = ""
-	match movement_direction:
-		"move_up":
-			propertyName = "climb_up"
-		"move_down":
-			propertyName = "climb_down"
-		"move_left", "move_right":
-			propertyName = "climb_sideways"
-			
-	return tile_data.get_custom_data(propertyName)
-
 func set_energy(energy : int):
 	energy = clamp(energy, 0, max_energy)
 	energy_display.set_energy(energy)
 	curr_energy = energy
 	energy_label.text = str(curr_energy/2.0)
 
-func handle_special_tile_pre(tile_data : TileData):
+func handle_special_tile_pre(tile_location : Vector2, special_tile_name : String):
 	
-	var special_tile_name : String = tile_data.get_custom_data("special_tile_name")
-	var energy_consumption := get_energy_consumption(tile_data, movement_direction)
+	var energy_consumption := tilemap_control.get_energy_consumption(tile_location, movement_direction)
 	
 	match special_tile_name:
 		"crack_tile":
-			var tile_data_of_last_tile := get_tile_data_at_point(last_tile_position)
-			if tile_data_of_last_tile.get_custom_data("special_tile_name") == "crack_tile":
+			if tilemap_control.get_special_tile_name(last_tile_position) == "crack_tile":
 				energy_consumption = 0
 			set_energy(curr_energy - energy_consumption)
 		_:
 			set_energy(curr_energy - energy_consumption)
 
-func handle_special_tile_post(special_tile_name : String) -> bool:
+func handle_special_tile_post(tile_location : Vector2, special_tile_name : String) -> bool:
 	
-	#return bool prevents further movement if true
-	
+	#return bool prevents further input movement if true
 	match special_tile_name:
 		"slide_tile":
 			if movement_direction == "move_down":
 				var next_tile_position: Vector2 = last_tile_position + (Vector2.DOWN * tile_size)
-				var tile_data = get_tile_data_at_point(next_tile_position)
-				if tile_data.get_custom_data("walkable"):
+				if tilemap_control.point_is_traversable(next_tile_position):
 					movement_forced = true
 					move_step("move_down")
 					movement_forced = false
@@ -295,7 +260,7 @@ func reset():
 	arrive_at_tile(last_tile_position)
 
 func set_position_offset(offset_at : Vector2):
-	if get_tile_data_at_point(offset_at).get_custom_data("floor"):
+	if tilemap_control.point_is_floor(offset_at):
 		tile_position_offset = tile_position_walking_offset
 	else:
 		tile_position_offset = Vector2.ZERO

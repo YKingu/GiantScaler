@@ -196,7 +196,7 @@ texture = ExtResource("1_opjio")
 2:1/0/custom_data_6 = "crack_tile"
 
 [resource]
-custom_data_layer_0/name = "walkable"
+custom_data_layer_0/name = "traversable"
 custom_data_layer_0/type = 1
 custom_data_layer_1/name = "floor"
 custom_data_layer_1/type = 1

@@ -11,7 +11,7 @@ var current_checkpoint_index : int
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	static_fields.main_scene = self
-	instantiate_level("res://Scenes/level1.tscn")
+	instantiate_level("res://Scenes/levelLeg.tscn")
 
 func _input(event):
 	

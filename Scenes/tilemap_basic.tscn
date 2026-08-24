@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dmx58gxmqpd7"]
+
+[ext_resource type="Script" uid="uid://dygff1o3aacrk" path="res://Scripts/TileMapControl.gd" id="1_djqga"]
+[ext_resource type="TileSet" uid="uid://d2qgwpuvpslru" path="res://Assets/tileset_data.tres" id="1_k6383"]
+[ext_resource type="TileSet" uid="uid://cl1e5rej48523" path="res://Assets/tileset_decoration.tres" id="3_67pft"]
+
+[node name="Tilemap" type="Node2D" unique_id=732750604 node_paths=PackedStringArray("tilemaps")]
+script = ExtResource("1_djqga")
+tilemaps = [NodePath("TileMapLayer"), NodePath("TileMapLayer2")]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1263438457]
+tile_set = ExtResource("1_k6383")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=894264040]
+tile_set = ExtResource("1_k6383")
+
+[node name="TileMapDecorations" type="Node2D" parent="." unique_id=426217215]
+
+[node name="TileMapLayer3" type="TileMapLayer" parent="TileMapDecorations" unique_id=43475510]
+tile_set = ExtResource("3_67pft")
+
+[node name="TileMapLayer4" type="TileMapLayer" parent="TileMapDecorations" unique_id=75219214]
+tile_set = ExtResource("3_67pft")
