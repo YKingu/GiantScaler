@@ -2,11 +2,31 @@
 
 [ext_resource type="Script" uid="uid://dygff1o3aacrk" path="res://Scripts/TileMapControl.gd" id="1_djqga"]
 [ext_resource type="TileSet" uid="uid://d2qgwpuvpslru" path="res://Assets/tileset_data.tres" id="1_k6383"]
+[ext_resource type="Texture2D" uid="uid://b5lsnvuywaj12" path="res://Assets/Sprites/Spritesheets/spritesheet_division.png" id="2_87dx4"]
 [ext_resource type="TileSet" uid="uid://cl1e5rej48523" path="res://Assets/tileset_decoration.tres" id="3_67pft"]
 
-[node name="Tilemap" type="Node2D" unique_id=732750604 node_paths=PackedStringArray("tilemaps")]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_87dx4"]
+texture = ExtResource("2_87dx4")
+texture_region_size = Vector2i(8, 8)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+1:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_prro3"]
+tile_size = Vector2i(8, 8)
+custom_data_layer_0/name = "division"
+custom_data_layer_0/type = 1
+sources/1 = SubResource("TileSetAtlasSource_87dx4")
+
+[node name="Tilemap" type="Node2D" unique_id=732750604 node_paths=PackedStringArray("tilemaps", "tilemap_division")]
 script = ExtResource("1_djqga")
 tilemaps = [NodePath("TileMapLayer"), NodePath("TileMapLayer2")]
+tilemap_division = NodePath("TileMapLayerDivisions")
+
+[node name="TileMapLayerDivisions" type="TileMapLayer" parent="." unique_id=870122426]
+z_index = 1
+position = Vector2(4, 4)
+tile_set = SubResource("TileSet_prro3")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1263438457]
 tile_set = ExtResource("1_k6383")

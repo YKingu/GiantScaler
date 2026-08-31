@@ -3,6 +3,10 @@ class_name TileMapControl
 extends Node2D
 
 @export var tilemaps : Array[TileMapLayer]
+@export var tilemap_division : TileMapLayer
+
+func _ready() -> void:
+	tilemap_division.visible = false
 
 func get_tile_bool(tile_position : Vector2, tile_data_name : String) -> bool:
 	var tile_data = get_tile_data_at_point(tile_position)
@@ -67,6 +71,15 @@ func step_is_traversable(tile_from :Vector2, tile_to :Vector2, movement_directio
 	#ensures you can't walk sideways from floor to wall
 	if movement_direction == "move_left" || movement_direction == "move_right":
 		if point_is_floor(tile_from) != point_is_floor(tile_to):
+			return false
+	
+	var coordinates_between : Vector2 = tile_from + ((tile_to - tile_from) / 2)
+	
+	var cell := tilemap_division.local_to_map(tilemap_division.to_local(coordinates_between))
+	var tile_data : TileData = tilemap_division.get_cell_tile_data(cell)
+	
+	if tile_data != null:
+		if tile_data.get_custom_data("division"):
 			return false
 	
 	return true

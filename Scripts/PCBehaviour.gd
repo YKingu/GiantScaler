@@ -126,6 +126,8 @@ func handle_tile_behaviour(next_tile_position : Vector2):
 		handle_special_tile_pre(next_tile_position, special_tile_name)
 	else:
 		var energy_consumption := tilemap_control.get_energy_consumption(next_tile_position, movement_direction)
+		if energy_consumption == -100:
+			return
 		set_energy(curr_energy - energy_consumption)
 
 func arrive_at_tile(new_tile_position : Vector2):
@@ -224,6 +226,9 @@ func set_energy(energy : int):
 func handle_special_tile_pre(tile_location : Vector2, special_tile_name : String):
 	
 	var energy_consumption := tilemap_control.get_energy_consumption(tile_location, movement_direction)
+	
+	if energy_consumption == -100:
+		return
 	
 	match special_tile_name:
 		"crack_tile":
