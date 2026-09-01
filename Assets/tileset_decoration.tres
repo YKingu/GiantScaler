@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dfyc0npkn0lha" path="res://Assets/Sprites/Spritesheets/spritesheet_line_wall_transition.png" id="3_prro3"]
 [ext_resource type="Texture2D" uid="uid://bp8ecdue50wlp" path="res://Assets/Sprites/Spritesheets/spritesheet_line_wall_edge.png" id="4_anwew"]
 [ext_resource type="Texture2D" uid="uid://pafu13wbb1hs" path="res://Assets/Sprites/Spritesheets/spritesheet_floor_edge.png" id="4_prro3"]
+[ext_resource type="Texture2D" uid="uid://bxr3q740yiih8" path="res://Assets/Sprites/Spritesheets/spritesheet_ledge_top.png" id="6_shjlr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_shjlr"]
 texture = ExtResource("1_rf7nj")
@@ -20,6 +21,10 @@ texture = ExtResource("1_rf7nj")
 3:1/0 = 0
 4:1/0 = 0
 5:1/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l837f"]
 texture = ExtResource("2_anwew")
@@ -117,9 +122,20 @@ texture = ExtResource("4_anwew")
 2:5/0 = 0
 3:5/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8kqsn"]
+texture = ExtResource("6_shjlr")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+
 [resource]
 sources/0 = SubResource("TileSetAtlasSource_shjlr")
 sources/1 = SubResource("TileSetAtlasSource_l837f")
 sources/2 = SubResource("TileSetAtlasSource_8i0wg")
 sources/4 = SubResource("TileSetAtlasSource_prro3")
 sources/3 = SubResource("TileSetAtlasSource_tbqdv")
+sources/5 = SubResource("TileSetAtlasSource_8kqsn")
