@@ -6,7 +6,8 @@ extends Node2D
 @export var tilemap_division : TileMapLayer
 
 func _ready() -> void:
-	tilemap_division.visible = false
+	if tilemap_division != null:
+		tilemap_division.visible = false
 
 func get_tile_bool(tile_position : Vector2, tile_data_name : String) -> bool:
 	var tile_data = get_tile_data_at_point(tile_position)
