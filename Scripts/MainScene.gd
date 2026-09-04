@@ -71,7 +71,7 @@ func load_new_checkpoint(load_next_checkpoint : bool):
 	if load_next_checkpoint:
 		new_checkpoint_index += 1
 		if new_checkpoint_index >= checkpoints.size():
-			new_checkpoint_index = checkpoints.size()
+			new_checkpoint_index = checkpoints.size() - 1
 	else:
 		new_checkpoint_index -= 1
 		if new_checkpoint_index < 0: 
