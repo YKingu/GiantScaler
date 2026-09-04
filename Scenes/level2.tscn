@@ -30,6 +30,7 @@ script = ExtResource("3_onqnr")
 tilemaps = [NodePath(".")]
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1611465160]
+visible = false
 position = Vector2(0, 24)
 
 [node name="Spider01" parent="Enemies" unique_id=353709359 instance=ExtResource("3_1k4by")]
