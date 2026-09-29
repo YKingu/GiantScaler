@@ -1,10 +1,22 @@
 [gd_scene format=3 uid="uid://dw1c8dafggngg"]
 
+[ext_resource type="PackedScene" uid="uid://r0u3vks38vdm" path="res://Scenes/tutorial_booklet.tscn" id="1_ons1q"]
 [ext_resource type="Script" uid="uid://b7au3sdmry4q4" path="res://Scripts/PCBehaviour.gd" id="1_wko77"]
+[ext_resource type="Script" uid="uid://dxc33qwspartj" path="res://Scenes/InputPopup.gd" id="2_ajo0r"]
+[ext_resource type="Texture2D" uid="uid://cpryov7rjl3r6" path="res://Assets/Sprites/Tutorial/popup_Tab.png" id="3_fcng2"]
 [ext_resource type="Texture2D" uid="uid://dbnbeee0l7oq7" path="res://Assets/Sprites/animations/pc_sheet.png" id="4_ajo0r"]
+[ext_resource type="FontFile" uid="uid://7nta8nsv4m05" path="res://Assets/Dico.ttf" id="4_fcng2"]
 [ext_resource type="Script" uid="uid://bd6wpj5ryaynd" path="res://Scenes/EnergyDisplay.gd" id="5_ons1q"]
+[ext_resource type="Texture2D" uid="uid://npxy1ppt27" path="res://Assets/Sprites/Tutorial/BoxLetter.png" id="5_q5hbr"]
 [ext_resource type="Texture2D" uid="uid://dgk2l12kp5rhi" path="res://Assets/Sprites/energy_circle_big.png" id="6_ajo0r"]
 [ext_resource type="Texture2D" uid="uid://cihvmlqo84fuc" path="res://Assets/Sprites/energy_circle_small.png" id="7_ajo0r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_flf3p"]
+font = ExtResource("4_fcng2")
+
+[sub_resource type="LabelSettings" id="LabelSettings_4wdx0"]
+font = ExtResource("4_fcng2")
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wdx0"]
 size = Vector2(736.06726, 750.00024)
@@ -108,6 +120,7 @@ y_sort_enabled = true
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1276788638]
 
 [node name="Label" type="Label" parent="Camera2D" unique_id=1672737437]
+visible = false
 z_index = 3
 offset_left = -317.0
 offset_top = -183.0
@@ -118,6 +131,7 @@ text = "Energy:
 "
 
 [node name="Label2" type="Label" parent="Camera2D" unique_id=2116993156]
+visible = false
 z_index = 3
 offset_left = -258.0
 offset_top = -182.0
@@ -127,6 +141,153 @@ theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "0
 
 "
+
+[node name="TutorialBooklet" parent="Camera2D" unique_id=1650068127 node_paths=PackedStringArray("camera", "input_popup") instance=ExtResource("1_ons1q")]
+camera = NodePath("..")
+input_popup = NodePath("../InputPopup")
+
+[node name="InputPopup" type="Node2D" parent="Camera2D" unique_id=1123443777 node_paths=PackedStringArray("tutorial_popup", "movement_popup", "change_page_popup")]
+z_index = 50
+script = ExtResource("2_ajo0r")
+tutorial_popup = NodePath("TutorialPopup")
+movement_popup = NodePath("WalkingPopup")
+change_page_popup = NodePath("ChangePagePopup")
+
+[node name="TutorialPopup" type="Sprite2D" parent="Camera2D/InputPopup" unique_id=150188946]
+visible = false
+position = Vector2(-36, 146)
+texture = ExtResource("3_fcng2")
+centered = false
+
+[node name="Label" type="Label" parent="Camera2D/InputPopup/TutorialPopup" unique_id=1045958947]
+offset_left = -38.0
+offset_top = -18.0
+offset_right = 109.0
+offset_bottom = -2.0
+text = "Open Notebook"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+
+[node name="WalkingPopup" type="Sprite2D" parent="Camera2D/InputPopup" unique_id=1242580790]
+visible = false
+position = Vector2(0, 135)
+texture = ExtResource("5_q5hbr")
+
+[node name="WalkingPopup2" type="Sprite2D" parent="Camera2D/InputPopup/WalkingPopup" unique_id=289578023]
+position = Vector2(-24, 24)
+texture = ExtResource("5_q5hbr")
+
+[node name="WalkingPopup4" type="Sprite2D" parent="Camera2D/InputPopup/WalkingPopup" unique_id=1800466002]
+position = Vector2(24, 24)
+texture = ExtResource("5_q5hbr")
+
+[node name="WalkingPopup3" type="Sprite2D" parent="Camera2D/InputPopup/WalkingPopup" unique_id=1635034604]
+position = Vector2(0, 24)
+texture = ExtResource("5_q5hbr")
+
+[node name="Label2" type="Label" parent="Camera2D/InputPopup/WalkingPopup" unique_id=1326266850]
+offset_left = -11.0
+offset_top = -6.0
+offset_right = 11.0
+offset_bottom = 11.0
+text = "W"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="Camera2D/InputPopup/WalkingPopup" unique_id=636982482]
+offset_left = -11.0
+offset_top = 18.0
+offset_right = 11.0
+offset_bottom = 35.0
+text = "S"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="Camera2D/InputPopup/WalkingPopup" unique_id=1365169631]
+offset_left = 13.0
+offset_top = 18.0
+offset_right = 35.0
+offset_bottom = 35.0
+text = "D"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="Camera2D/InputPopup/WalkingPopup" unique_id=1920271502]
+offset_left = -35.0
+offset_top = 18.0
+offset_right = -13.0
+offset_bottom = 35.0
+text = "A"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label6" type="Label" parent="Camera2D/InputPopup/WalkingPopup" unique_id=2020173401]
+offset_left = -21.0
+offset_top = -30.0
+offset_right = 21.0
+offset_bottom = -13.0
+text = "Move"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ChangePagePopup" type="Node2D" parent="Camera2D/InputPopup" unique_id=535591268]
+process_mode = 3
+visible = false
+z_index = 300
+
+[node name="ChangePagePopup" type="Sprite2D" parent="Camera2D/InputPopup/ChangePagePopup" unique_id=146519945]
+position = Vector2(270, 135)
+texture = ExtResource("5_q5hbr")
+
+[node name="Label8" type="Label" parent="Camera2D/InputPopup/ChangePagePopup/ChangePagePopup" unique_id=1972114668]
+offset_left = -11.0
+offset_top = -6.0
+offset_right = 11.0
+offset_bottom = 11.0
+text = "D"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label9" type="Label" parent="Camera2D/InputPopup/ChangePagePopup/ChangePagePopup" unique_id=1331301817]
+offset_left = 5.0
+offset_top = -6.0
+offset_right = 27.0
+offset_bottom = 11.0
+text = ">"
+label_settings = SubResource("LabelSettings_4wdx0")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ChangePagePopup2" type="Sprite2D" parent="Camera2D/InputPopup/ChangePagePopup" unique_id=1222740413]
+position = Vector2(-271, 135)
+texture = ExtResource("5_q5hbr")
+
+[node name="Label7" type="Label" parent="Camera2D/InputPopup/ChangePagePopup/ChangePagePopup2" unique_id=933382425]
+offset_left = -11.0
+offset_top = -6.0
+offset_right = 11.0
+offset_bottom = 11.0
+text = "A"
+label_settings = SubResource("LabelSettings_flf3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label10" type="Label" parent="Camera2D/InputPopup/ChangePagePopup/ChangePagePopup2" unique_id=2056451518]
+offset_left = -27.0
+offset_top = -7.0
+offset_right = -5.0
+offset_bottom = 28.0
+text = "<
+"
+label_settings = SubResource("LabelSettings_4wdx0")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1840962889 node_paths=PackedStringArray("energy_label", "sprite_animation", "camera", "energy_display")]
 y_sort_enabled = true

@@ -2,10 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://dw1c8dafggngg" path="res://Scenes/player_character.tscn" id="1_pwpxa"]
 [ext_resource type="Texture2D" uid="uid://pera5wfty3gx" path="res://Assets/Sprites/Big sprite env.png" id="2_5vqgr"]
+[ext_resource type="Texture2D" uid="uid://wvm7utdabvuo" path="res://Assets/Sprites/book.png" id="3_ebjhu"]
 [ext_resource type="PackedScene" uid="uid://dmx58gxmqpd7" path="res://Scenes/tilemap_basic.tscn" id="3_mcfgl"]
 [ext_resource type="TileSet" uid="uid://cl1e5rej48523" path="res://Assets/tileset_decoration.tres" id="4_5vqgr"]
 [ext_resource type="PackedScene" uid="uid://cx8qoqyyleksp" path="res://Scenes/save_monument.tscn" id="4_ebjhu"]
 [ext_resource type="PackedScene" uid="uid://bvfxncd7rgq7r" path="res://Scenes/enemy_spider.tscn" id="6_mcfgl"]
+[ext_resource type="PackedScene" uid="uid://dxhnmvkd5auu" path="res://Scenes/tutorial_popup.tscn" id="8_r80wu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4wdx0"]
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_lj3cm"]
 points = PackedVector2Array(-2, -19.399998, 9.599999, -23.199997, 14.599998, -13.199998, 15.999998, -5.5999985, 10.4, 2.6000006, -2, -0.39999914)
@@ -25,8 +29,18 @@ texture = ExtResource("2_5vqgr")
 
 [node name="PlayerCharacter" parent="." unique_id=511711406 instance=ExtResource("1_pwpxa")]
 
+[node name="TutorialBooklet" parent="PlayerCharacter/Camera2D" parent_id_path=PackedInt32Array(511711406, 1276788638) index="2" unique_id=1650068127]
+unlocked_pages = 2
+
 [node name="CharacterBody2D" parent="PlayerCharacter" index="1" unique_id=1840962889 node_paths=PackedStringArray("tilemap_control")]
 tilemap_control = NodePath("../../Tilemap2")
+
+[node name="Book" type="Sprite2D" parent="PlayerCharacter/CharacterBody2D" index="3" unique_id=2024325318]
+visible = false
+z_index = 100
+z_as_relative = false
+position = Vector2(1, 0)
+texture = ExtResource("3_ebjhu")
 
 [node name="Tilemap2" parent="." unique_id=1581072912 instance=ExtResource("3_mcfgl")]
 
@@ -146,6 +160,50 @@ check_point_number = 180
 position = Vector2(-1056, -3973)
 check_point_number = 190
 
+[node name="Tutorials" type="Node2D" parent="." unique_id=2029004868]
+position = Vector2(0, 24)
+
+[node name="Tutorial Move" parent="Tutorials" unique_id=803279756 node_paths=PackedStringArray("tutorial_booklet", "input_popup") instance=ExtResource("8_r80wu")]
+position = Vector2(-131, 39)
+tutorial_booklet = NodePath("../../PlayerCharacter/Camera2D/TutorialBooklet")
+input_popup = NodePath("../../PlayerCharacter/Camera2D/InputPopup")
+tutorial_booklet_page = 1
+curr_tutorial_type = 1
+
+[node name="CollisionShape2D" parent="Tutorials/Tutorial Move" index="0" unique_id=470431623]
+position = Vector2(-26, -23)
+scale = Vector2(4.49, 1)
+
+[node name="Tutorial Popup" parent="Tutorials" unique_id=912767930 node_paths=PackedStringArray("tutorial_booklet", "input_popup") instance=ExtResource("8_r80wu")]
+tutorial_booklet = NodePath("../../PlayerCharacter/Camera2D/TutorialBooklet")
+input_popup = NodePath("../../PlayerCharacter/Camera2D/InputPopup")
+tutorial_booklet_page = 1
+
+[node name="CollisionShape2D" parent="Tutorials/Tutorial Popup" index="0" unique_id=470431623]
+scale = Vector2(4.49, 1)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Tutorials/Tutorial Popup" unique_id=1446156466]
+position = Vector2(-35, -15)
+shape = SubResource("RectangleShape2D_4wdx0")
+
+[node name="Tutorial Popup2" parent="Tutorials" unique_id=1424395113 node_paths=PackedStringArray("tutorial_booklet", "input_popup") instance=ExtResource("8_r80wu")]
+position = Vector2(-188, -542)
+tutorial_booklet = NodePath("../../PlayerCharacter/Camera2D/TutorialBooklet")
+input_popup = NodePath("../../PlayerCharacter/Camera2D/InputPopup")
+tutorial_booklet_page = 3
+
+[node name="CollisionShape2D" parent="Tutorials/Tutorial Popup2" index="0" unique_id=470431623]
+scale = Vector2(4.49, 1)
+
+[node name="Tutorial Popup3" parent="Tutorials" unique_id=1030211851 node_paths=PackedStringArray("tutorial_booklet", "input_popup") instance=ExtResource("8_r80wu")]
+position = Vector2(-604, -1448)
+tutorial_booklet = NodePath("../../PlayerCharacter/Camera2D/TutorialBooklet")
+input_popup = NodePath("../../PlayerCharacter/Camera2D/InputPopup")
+tutorial_booklet_page = 4
+
+[node name="CollisionShape2D" parent="Tutorials/Tutorial Popup3" index="0" unique_id=470431623]
+scale = Vector2(4.49, 1)
+
 [node name="Enemies" type="Node2D" parent="." unique_id=952874292]
 position = Vector2(0, 24)
 
@@ -184,6 +242,10 @@ shape = SubResource("RectangleShape2D_0p5el")
 
 [editable path="PlayerCharacter"]
 [editable path="Tilemap2"]
+[editable path="Tutorials/Tutorial Move"]
+[editable path="Tutorials/Tutorial Popup"]
+[editable path="Tutorials/Tutorial Popup2"]
+[editable path="Tutorials/Tutorial Popup3"]
 [editable path="Enemies/Spider01"]
 [editable path="Enemies/Spider02"]
 [editable path="Enemies/Spider04"]

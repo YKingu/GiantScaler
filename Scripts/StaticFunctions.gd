@@ -2,7 +2,6 @@ class_name StaticFunctions
 
 extends Node
 
-
 func get_all_child_nodes(node : Node) -> Array[Node]:
 	
 	var return_array := node.get_children()

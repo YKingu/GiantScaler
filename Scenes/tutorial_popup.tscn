@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dxhnmvkd5auu"]
+
+[ext_resource type="Script" uid="uid://b3024wtk7x7av" path="res://Scripts/TutorialPopup.gd" id="1_er2x6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4wdx0"]
+
+[node name="Tutorial Popup" type="Area2D" unique_id=912767930 node_paths=PackedStringArray("tutorial_booklet", "input_popup")]
+script = ExtResource("1_er2x6")
+tutorial_booklet = NodePath("")
+input_popup = NodePath("")
+tutorial_booklet_page = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=470431623]
+shape = SubResource("RectangleShape2D_4wdx0")
