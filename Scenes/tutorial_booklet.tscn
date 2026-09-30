@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://324p6u61pghg" path="res://Assets/Sprites/Tutorial/page_02.png" id="4_ke14c"]
 [ext_resource type="Texture2D" uid="uid://xau36wxpeoik" path="res://Assets/Sprites/Tutorial/page_03.png" id="5_tsenc"]
 [ext_resource type="Texture2D" uid="uid://b5bsh5e8r7113" path="res://Assets/Sprites/Tutorial/page_04.png" id="6_wk1p0"]
+[ext_resource type="Texture2D" uid="uid://jrykdv32cjuy" path="res://Assets/Sprites/Tutorial/page_05.png" id="9_tsenc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_d1gos"]
 font = ExtResource("3_tsenc")
@@ -18,6 +19,7 @@ font_color = Color(0, 0, 0, 1)
 
 [node name="TutorialBooklet" type="Node2D" unique_id=1650068127 node_paths=PackedStringArray("main_page_node", "change_page_tutorial", "change_page_tutorialL", "change_page_tutorialR")]
 process_mode = 3
+visible = false
 z_index = 100
 script = ExtResource("2_wk1p0")
 main_page_node = NodePath("Pages")
@@ -98,3 +100,7 @@ texture = ExtResource("5_tsenc")
 [node name="Page04" type="Sprite2D" parent="Pages" unique_id=1218974692]
 visible = false
 texture = ExtResource("6_wk1p0")
+
+[node name="Page05" type="Sprite2D" parent="Pages" unique_id=1442034153]
+visible = false
+texture = ExtResource("9_tsenc")

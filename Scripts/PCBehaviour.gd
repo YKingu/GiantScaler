@@ -142,7 +142,7 @@ func arrive_at_tile(new_tile_position : Vector2):
 			move_camera_coroutine()
 		else:
 			move_coroutine(last_tile_position + (Vector2.DOWN * tile_size), falling_speed)
-			if abs((fall_start_tile_position - last_tile_position).y) > 9 * tile_size:
+			if abs((fall_start_tile_position - last_tile_position).y) > 10 * tile_size:
 				die()
 		return
 	
@@ -183,21 +183,51 @@ func handle_energy_display_visibility():
 	else:
 		energy_display.visible = true
 
+var last_animation_state : String = ""
 func handle_animation():
+	
+	var new_animation_state : String = ""
 	match curr_player_state:
+		
 		Player_State.IDLE:
 			if tilemap_control.point_is_floor(self.position):
-				change_animation_if_different("Idle")
+				if last_animation_state in ["WalkRight","IdleRight"]:
+					new_animation_state = "IdleRight"
+				else:
+					new_animation_state = "IdleLeft"
 			else:
-				change_animation_if_different("ClimbIdle")
+				new_animation_state = "ClimbIdle"
+		
 		Player_State.WALKING:
-			change_animation_if_different("Idle")
+			match movement_vector:
+				Vector2.UP:
+					new_animation_state = "WalkUp"
+				Vector2.DOWN:
+					new_animation_state = "WalkDown"
+				Vector2.LEFT:
+					new_animation_state = "WalkLeft"
+				Vector2.RIGHT:
+					new_animation_state = "WalkRight"
+		
 		Player_State.CLIMBING:
-			change_animation_if_different("Climb")
+			match movement_vector:
+				Vector2.UP:
+					new_animation_state = "ClimbUp"
+				Vector2.DOWN:
+					new_animation_state = "ClimbDown"
+				Vector2.LEFT:
+					new_animation_state = "ClimbLeft"
+				Vector2.RIGHT:
+					new_animation_state = "ClimbRight"
+		
 		Player_State.FALLING:
 			change_animation_if_different("Falling")
 		Player_State.FLAT:
-			change_animation_if_different("Idle")
+			change_animation_if_different("IdleLeft")
+	
+	if new_animation_state != "":
+		change_animation_if_different(new_animation_state)
+		last_animation_state = new_animation_state
 
 func change_animation_if_different(new_animation: String):
 	
