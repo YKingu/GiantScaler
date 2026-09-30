@@ -191,7 +191,7 @@ func handle_animation():
 		
 		Player_State.IDLE:
 			if tilemap_control.point_is_floor(self.position):
-				if last_animation_state in ["WalkRight","IdleRight"]:
+				if last_animation_state in ["WalkRight","IdleRight","WalkUp"]:
 					new_animation_state = "IdleRight"
 				else:
 					new_animation_state = "IdleLeft"

@@ -414,6 +414,7 @@ text = "0
 "
 
 [node name="TutorialBooklet" parent="Camera2D" unique_id=1650068127 node_paths=PackedStringArray("camera") instance=ExtResource("1_ons1q")]
+z_index = 1000
 camera = NodePath("..")
 
 [node name="InputPopup" type="Node2D" parent="Camera2D" unique_id=1123443777 node_paths=PackedStringArray("tutorial_popup", "movement_popup")]
@@ -507,7 +508,7 @@ vertical_alignment = 1
 [node name="ChangePagePopup" type="Node2D" parent="Camera2D/InputPopup" unique_id=535591268]
 process_mode = 3
 visible = false
-z_index = 300
+z_index = 2000
 
 [node name="ChangePagePopup" type="Sprite2D" parent="Camera2D/InputPopup/ChangePagePopup" unique_id=146519945]
 position = Vector2(270, 135)
